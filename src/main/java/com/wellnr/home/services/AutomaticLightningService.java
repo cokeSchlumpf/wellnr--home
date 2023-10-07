@@ -3,6 +3,7 @@ package com.wellnr.home.services;
 import com.luckycatlabs.sunrisesunset.SunriseSunsetCalculator;
 import com.luckycatlabs.sunrisesunset.dto.Location;
 import com.wellnr.common.markup.Tuple3;
+import com.wellnr.home.framework.EWeLinkSwitch;
 import com.wellnr.home.framework.TasmatoPlug;
 import lombok.extern.slf4j.Slf4j;
 import org.eclipse.paho.client.mqttv3.IMqttClient;
@@ -21,20 +22,22 @@ public class AutomaticLightningService {
 
     private final TasmatoPlug[] iotPlugs;
 
+    private final EWeLinkSwitch outsideSwitch;
+
     private final TimeZone timeZone;
 
     private final SunriseSunsetCalculator sunriseSunsetCalculator;
 
     Boolean lightsTurnedOn;
 
-    public AutomaticLightningService(IMqttClient client) {
+    public AutomaticLightningService(IMqttClient client, EWeLinkSwitch outsideSwitch) {
         this.iotPlugs = new TasmatoPlug[3];
 
         this.iotPlugs[0] = new TasmatoPlug(client, "wellnr/home", "iot-plug-001");
         this.iotPlugs[1] = new TasmatoPlug(client, "wellnr/home", "iot-plug-002");
         this.iotPlugs[2] = new TasmatoPlug(client, "wellnr/home", "iot-plug-003");
 
-
+        this.outsideSwitch = outsideSwitch;
 
         var location = new Location("49.442009", "6.636030");
         this.timeZone = TimeZone.getTimeZone("Europe/Berlin");
@@ -53,26 +56,38 @@ public class AutomaticLightningService {
         var sunsetIsToday = today.isEqual(sunset);
 
         if (sunriseIsToday && sunsetIsToday) {
-            if (Objects.isNull(this.lightsTurnedOn) || !this.lightsTurnedOn) {
-                this.iotPlugs[0].turnOn();
-                this.iotPlugs[1].turnOn();
-                this.iotPlugs[2].turnOn();
-                this.lightsTurnedOn = true;
-            }
+            turnOn();
         } else if (!sunriseIsToday && sunsetIsToday) {
-            if (Objects.isNull(this.lightsTurnedOn) || this.lightsTurnedOn) {
-                this.iotPlugs[0].turnOff();
-                this.iotPlugs[1].turnOff();
-                this.iotPlugs[2].turnOff();
-                this.lightsTurnedOn = false;
-            }
+            turnOff();
         } else {
-            if (Objects.isNull(this.lightsTurnedOn) || !this.lightsTurnedOn) {
-                this.iotPlugs[0].turnOn();
-                this.iotPlugs[1].turnOn();
-                this.iotPlugs[2].turnOn();
-                this.lightsTurnedOn = true;
-            }
+            turnOn();
+        }
+    }
+
+    private void turnOn() {
+        if (Objects.isNull(this.lightsTurnedOn) || !this.lightsTurnedOn) {
+            log.info("Send request to turn on the lights ...");
+            this.iotPlugs[0].turnOn();
+            this.iotPlugs[1].turnOn();
+            this.iotPlugs[2].turnOn();
+
+            this.outsideSwitch.turnOn();
+
+            this.lightsTurnedOn = true;
+        }
+    }
+
+    private void turnOff() {
+        if (Objects.isNull(this.lightsTurnedOn) || this.lightsTurnedOn) {
+            log.info("Send request to turn off the lights ...");
+
+            this.iotPlugs[0].turnOff();
+            this.iotPlugs[1].turnOff();
+            this.iotPlugs[2].turnOff();
+
+            this.outsideSwitch.turnOff();
+
+            this.lightsTurnedOn = false;
         }
     }
 
