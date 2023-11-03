@@ -31,11 +31,13 @@ public class AutomaticLightningService {
     Boolean lightsTurnedOn;
 
     public AutomaticLightningService(IMqttClient client, EWeLinkSwitch outsideSwitch) {
-        this.iotPlugs = new TasmatoPlug[3];
+        this.iotPlugs = new TasmatoPlug[5];
 
         this.iotPlugs[0] = new TasmatoPlug(client, "wellnr/home", "iot-plug-001");
         this.iotPlugs[1] = new TasmatoPlug(client, "wellnr/home", "iot-plug-002");
         this.iotPlugs[2] = new TasmatoPlug(client, "wellnr/home", "iot-plug-003");
+        this.iotPlugs[3] = new TasmatoPlug(client, "wellnr/home", "iot-plug-004");
+        this.iotPlugs[4] = new TasmatoPlug(client, "wellnr/home", "iot-plug-005");
 
         this.outsideSwitch = outsideSwitch;
 
@@ -67,9 +69,9 @@ public class AutomaticLightningService {
     private void turnOn() {
         if (Objects.isNull(this.lightsTurnedOn) || !this.lightsTurnedOn) {
             log.info("Send request to turn on the lights ...");
-            this.iotPlugs[0].turnOn();
-            this.iotPlugs[1].turnOn();
-            this.iotPlugs[2].turnOn();
+            for (var i = 0; i < 5; i++) {
+                this.iotPlugs[i].turnOn();
+            }
 
             this.outsideSwitch.turnOn();
 
@@ -81,9 +83,9 @@ public class AutomaticLightningService {
         if (Objects.isNull(this.lightsTurnedOn) || this.lightsTurnedOn) {
             log.info("Send request to turn off the lights ...");
 
-            this.iotPlugs[0].turnOff();
-            this.iotPlugs[1].turnOff();
-            this.iotPlugs[2].turnOff();
+            for (var i = 0; i < 5; i++) {
+                this.iotPlugs[i].turnOff();
+            }
 
             this.outsideSwitch.turnOff();
 
