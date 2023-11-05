@@ -33,7 +33,7 @@ public class ApplicationSpringConfiguration {
     @Bean
     public IMqttClient getMqttClient() {
         return Operators.suppressExceptions(() -> {
-            var publisherId = "mqtt.home.wellnr.com";
+            var publisherId = mqttPublisherId;
             var client = new MqttClient(mqttBrokerUrl, publisherId);
 
             MqttConnectOptions options = new MqttConnectOptions();

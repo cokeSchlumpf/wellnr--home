@@ -1,5 +1,5 @@
 app.mqtt-broker: "tcp://michael-nuc:1883"
-app.mqtt-publisher-id: "mqtt.home.wellnr.com"
+app.mqtt-publisher-id: "test.home.wellnr.com"
 
 app.ewelink.outside:
       enable-url: "xxx"
