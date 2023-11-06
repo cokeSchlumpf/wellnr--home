@@ -58,6 +58,7 @@ public class AutomaticLightningService {
         var nextSunriseAndNextSunset = this.getNextSunriseAndNextSunset();
 
         var shutdownWorkLightsTime = LocalTime.parse("01:00:00");
+        var turnOnWorkLightsMorning = LocalTime.parse("06:00:00");
 
         var today = nextSunriseAndNextSunset.get_3().toLocalDate();
         var sunrise = nextSunriseAndNextSunset.get_1().toLocalDate();
@@ -68,7 +69,7 @@ public class AutomaticLightningService {
         if (sunriseIsToday && sunsetIsToday) { // after midnight
             Operators.ignoreExceptions(this::turnOnNightLights, log);
 
-            if (LocalTime.now().isBefore(shutdownWorkLightsTime)) {
+            if (LocalTime.now().isBefore(shutdownWorkLightsTime) || LocalTime.now().isAfter(turnOnWorkLightsMorning)) {
                 Operators.ignoreExceptions(this::turnOnWorkLights, log);
             } else {
                 Operators.ignoreExceptions(this::turnOffWorkLights, log);
