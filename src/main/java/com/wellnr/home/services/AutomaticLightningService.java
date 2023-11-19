@@ -43,6 +43,8 @@ public class AutomaticLightningService {
         this.iotPlugs[3] = new TasmatoPlug(client, "wellnr/home", "iot-plug-004"); // Work window
         this.iotPlugs[4] = new TasmatoPlug(client, "wellnr/home", "iot-plug-005"); // Work window
         this.iotPlugs[5] = new TasmatoPlug(client, "wellnr/home", "iot-plug-006"); // Work wall
+        this.iotPlugs[6] = new TasmatoPlug(client, "wellnr/home", "iot-plug-007"); // Guests south
+        this.iotPlugs[7] = new TasmatoPlug(client, "wellnr/home", "iot-plug-008"); // Gallery 2nd floor south
 
         this.outsideSwitch = outsideSwitch;
 
@@ -99,7 +101,7 @@ public class AutomaticLightningService {
     private void turnOnWorkLights() {
         if (Objects.isNull(this.workLightsTurnedOn) || !this.workLightsTurnedOn) {
             log.info("Send request to turn on work lights");
-            for (var i = 3; i < 6; i++) {
+            for (var i = 3; i < 8; i++) {
                 this.iotPlugs[i].turnOn();
             }
 
@@ -124,7 +126,7 @@ public class AutomaticLightningService {
         if (Objects.isNull(this.workLightsTurnedOn) || this.workLightsTurnedOn) {
             log.info("Send request to turn off work lights ...");
 
-            for (var i = 3; i <6; i++) {
+            for (var i = 3; i < 8; i++) {
                 this.iotPlugs[i].turnOff();
             }
 
