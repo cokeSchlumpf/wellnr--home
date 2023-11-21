@@ -35,7 +35,7 @@ public class AutomaticLightningService {
     Boolean workLightsTurnedOn;
 
     public AutomaticLightningService(IMqttClient client, EWeLinkSwitch outsideSwitch) {
-        this.iotPlugs = new TasmatoPlug[6];
+        this.iotPlugs = new TasmatoPlug[8];
 
         this.iotPlugs[0] = new TasmatoPlug(client, "wellnr/home", "iot-plug-001"); // Gallery
         this.iotPlugs[1] = new TasmatoPlug(client, "wellnr/home", "iot-plug-002"); // Living-Room
