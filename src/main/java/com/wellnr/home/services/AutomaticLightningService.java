@@ -35,7 +35,7 @@ public class AutomaticLightningService {
     Boolean workLightsTurnedOn;
 
     public AutomaticLightningService(IMqttClient client, EWeLinkSwitch outsideSwitch) {
-        this.iotPlugs = new TasmatoPlug[8];
+        this.iotPlugs = new TasmatoPlug[16];
 
         this.iotPlugs[0] = new TasmatoPlug(client, "wellnr/home", "iot-plug-001"); // Gallery
         this.iotPlugs[1] = new TasmatoPlug(client, "wellnr/home", "iot-plug-002"); // Living-Room
@@ -44,7 +44,15 @@ public class AutomaticLightningService {
         this.iotPlugs[4] = new TasmatoPlug(client, "wellnr/home", "iot-plug-005"); // Work window
         this.iotPlugs[5] = new TasmatoPlug(client, "wellnr/home", "iot-plug-006"); // Work wall
         this.iotPlugs[6] = new TasmatoPlug(client, "wellnr/home", "iot-plug-007"); // Guests south
-        this.iotPlugs[7] = new TasmatoPlug(client, "wellnr/home", "iot-plug-008"); // Gallery 2nd floor south
+        this.iotPlugs[7] = new TasmatoPlug(client, "wellnr/home", "iot-plug-008");
+        this.iotPlugs[8] = new TasmatoPlug(client, "wellnr/home", "iot-plug-009");
+        this.iotPlugs[9] = new TasmatoPlug(client, "wellnr/home", "iot-plug-010");
+        this.iotPlugs[10] = new TasmatoPlug(client, "wellnr/home", "iot-plug-011");
+        this.iotPlugs[11] = new TasmatoPlug(client, "wellnr/home", "iot-plug-012");
+        this.iotPlugs[12] = new TasmatoPlug(client, "wellnr/home", "iot-plug-013");
+        this.iotPlugs[13] = new TasmatoPlug(client, "wellnr/home", "iot-plug-014");
+        this.iotPlugs[14] = new TasmatoPlug(client, "wellnr/home", "iot-plug-015");
+        this.iotPlugs[15] = new TasmatoPlug(client, "wellnr/home", "iot-plug-016");
 
         this.outsideSwitch = outsideSwitch;
 
@@ -59,7 +67,7 @@ public class AutomaticLightningService {
     public void switchLights() {
         var nextSunriseAndNextSunset = this.getNextSunriseAndNextSunset();
 
-        var shutdownWorkLightsTime = LocalTime.parse("01:00:00");
+        var shutdownWorkLightsTime = LocalTime.parse("00:05:00");
         var turnOnWorkLightsMorning = LocalTime.parse("06:00:00");
 
         var now = LocalTime.now(this.timeZone.toZoneId());
@@ -101,7 +109,7 @@ public class AutomaticLightningService {
     private void turnOnWorkLights() {
         if (Objects.isNull(this.workLightsTurnedOn) || !this.workLightsTurnedOn) {
             log.info("Send request to turn on work lights");
-            for (var i = 3; i < 8; i++) {
+            for (var i = 3; i < this.iotPlugs.length; i++) {
                 this.iotPlugs[i].turnOn();
             }
 
@@ -126,7 +134,7 @@ public class AutomaticLightningService {
         if (Objects.isNull(this.workLightsTurnedOn) || this.workLightsTurnedOn) {
             log.info("Send request to turn off work lights ...");
 
-            for (var i = 3; i < 8; i++) {
+            for (var i = 3; i < this.iotPlugs.length; i++) {
                 this.iotPlugs[i].turnOff();
             }
 
