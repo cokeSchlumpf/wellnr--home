@@ -35,7 +35,7 @@ public class AutomaticLightningService {
     Boolean workLightsTurnedOn;
 
     public AutomaticLightningService(IMqttClient client, EWeLinkSwitch outsideSwitch) {
-        this.iotPlugs = new TasmatoPlug[16];
+        this.iotPlugs = new TasmatoPlug[18];
 
         this.iotPlugs[0] = new TasmatoPlug(client, "wellnr/home", "iot-plug-001"); // Gallery
         this.iotPlugs[1] = new TasmatoPlug(client, "wellnr/home", "iot-plug-002"); // Living-Room
@@ -53,6 +53,8 @@ public class AutomaticLightningService {
         this.iotPlugs[13] = new TasmatoPlug(client, "wellnr/home", "iot-plug-014");
         this.iotPlugs[14] = new TasmatoPlug(client, "wellnr/home", "iot-plug-015");
         this.iotPlugs[15] = new TasmatoPlug(client, "wellnr/home", "iot-plug-016");
+        this.iotPlugs[16] = new TasmatoPlug(client, "wellnr/home", "iot-plug-017");
+        this.iotPlugs[17] = new TasmatoPlug(client, "wellnr/home", "iot-plug-018");
 
         this.outsideSwitch = outsideSwitch;
 
@@ -111,6 +113,7 @@ public class AutomaticLightningService {
             log.info("Send request to turn on work lights");
             for (var i = 3; i < this.iotPlugs.length; i++) {
                 this.iotPlugs[i].turnOn();
+                Operators.suppressExceptions(() -> Thread.sleep(300));
             }
 
             this.workLightsTurnedOn = true;
@@ -136,6 +139,7 @@ public class AutomaticLightningService {
 
             for (var i = 3; i < this.iotPlugs.length; i++) {
                 this.iotPlugs[i].turnOff();
+                Operators.suppressExceptions(() -> Thread.sleep(300));
             }
 
             this.workLightsTurnedOn = false;
