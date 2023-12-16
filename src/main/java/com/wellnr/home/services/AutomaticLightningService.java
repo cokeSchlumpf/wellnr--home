@@ -69,7 +69,7 @@ public class AutomaticLightningService {
     public void switchLights() {
         var nextSunriseAndNextSunset = this.getNextSunriseAndNextSunset();
 
-        var shutdownWorkLightsTime = LocalTime.parse("00:05:00");
+        var shutdownWorkLightsTime = LocalTime.parse("03:05:00");
         var turnOnWorkLightsMorning = LocalTime.parse("06:00:00");
 
         var now = LocalTime.now(this.timeZone.toZoneId());
@@ -99,7 +99,7 @@ public class AutomaticLightningService {
     private void turnOnNightLights() {
         if (Objects.isNull(this.nightLightsTurnedOn) || !this.nightLightsTurnedOn) {
             log.info("Send request to turn on the lights ...");
-            for (var i = 0; i < 3; i++) {
+            for (var i = 0; i < 2; i++) {
                 this.iotPlugs[i].turnOn();
             }
 
@@ -111,7 +111,7 @@ public class AutomaticLightningService {
     private void turnOnWorkLights() {
         if (Objects.isNull(this.workLightsTurnedOn) || !this.workLightsTurnedOn) {
             log.info("Send request to turn on work lights");
-            for (var i = 3; i < this.iotPlugs.length; i++) {
+            for (var i = 2; i < this.iotPlugs.length; i++) {
                 this.iotPlugs[i].turnOn();
                 Operators.suppressExceptions(() -> Thread.sleep(300));
             }
@@ -124,7 +124,7 @@ public class AutomaticLightningService {
         if (Objects.isNull(this.nightLightsTurnedOn) || this.nightLightsTurnedOn) {
             log.info("Send request to turn off the lights ...");
 
-            for (var i = 0; i < 3; i++) {
+            for (var i = 0; i < 2; i++) {
                 this.iotPlugs[i].turnOff();
             }
 
@@ -137,7 +137,7 @@ public class AutomaticLightningService {
         if (Objects.isNull(this.workLightsTurnedOn) || this.workLightsTurnedOn) {
             log.info("Send request to turn off work lights ...");
 
-            for (var i = 3; i < this.iotPlugs.length; i++) {
+            for (var i = 2; i < this.iotPlugs.length; i++) {
                 this.iotPlugs[i].turnOff();
                 Operators.suppressExceptions(() -> Thread.sleep(300));
             }
