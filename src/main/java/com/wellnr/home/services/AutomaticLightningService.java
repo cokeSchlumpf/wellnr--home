@@ -69,7 +69,7 @@ public class AutomaticLightningService {
     public void switchLights() {
         var nextSunriseAndNextSunset = this.getNextSunriseAndNextSunset();
 
-        var shutdownWorkLightsTime = LocalTime.parse("03:05:00");
+        var shutdownWorkLightsTime = LocalTime.parse("00:30:00");
         var turnOnWorkLightsMorning = LocalTime.parse("06:00:00");
 
         var now = LocalTime.now(this.timeZone.toZoneId());
