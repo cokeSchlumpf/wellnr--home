@@ -1,5 +1,7 @@
-package com.wellnr.home.framework;
+package com.wellnr.home.framework.twins.impl;
 
+import com.wellnr.home.framework.twins.Device;
+import com.wellnr.home.framework.twins.Switch;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import okhttp3.OkHttpClient;
@@ -9,7 +11,7 @@ import java.util.Optional;
 
 @Slf4j
 @AllArgsConstructor
-public class EWeLinkSwitch extends Device<Boolean, EWeLinkSwitch> {
+public class EWeLinkSwitch extends Device<Boolean, EWeLinkSwitch> implements Switch {
 
     private final String deviceName;
 

@@ -2,7 +2,7 @@ package com.wellnr.home;
 
 
 import com.wellnr.common.Operators;
-import com.wellnr.home.framework.EWeLinkSwitch;
+import com.wellnr.home.framework.twins.impl.EWeLinkSwitch;
 import lombok.extern.slf4j.Slf4j;
 import okhttp3.OkHttpClient;
 import org.eclipse.paho.client.mqttv3.IMqttClient;

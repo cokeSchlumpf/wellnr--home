@@ -1,4 +1,4 @@
-package com.wellnr.home.framework;
+package com.wellnr.home.framework.twins;
 
 import com.wellnr.common.Registration;
 import com.wellnr.common.TypedObservable;
@@ -37,7 +37,7 @@ public abstract class Device<T, D extends Device<T, D>> implements TypedObservab
     }
 
     /**
-     * Utili method to inform about state changes of the device.
+     * Utility method to inform about state changes of the device.
      *
      * @param event The event/ new value to be handled.
      */
