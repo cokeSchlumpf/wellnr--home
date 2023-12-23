@@ -154,10 +154,10 @@ public class AutomaticLightningService {
     private Tuple3<LocalDateTime, LocalDateTime, LocalDateTime> getNextSunriseAndNextSunset() {
         var calendar = Calendar.getInstance(timeZone);
         var sunrise = toLocalDateTime(sunriseSunsetCalculator.getOfficialSunriseCalendarForDate(calendar))
-            .plus(Duration.ofMinutes(60));
+            .plus(Duration.ofMinutes(90));
 
         var sunset = toLocalDateTime(sunriseSunsetCalculator.getOfficialSunsetCalendarForDate(calendar))
-            .minus(Duration.ofMinutes(30));
+            .minus(Duration.ofMinutes(90));
 
         var now = LocalDateTime.now(this.timeZone.toZoneId());
 
@@ -165,15 +165,15 @@ public class AutomaticLightningService {
             calendar.add(Calendar.DATE, 1);
 
             sunrise = toLocalDateTime(sunriseSunsetCalculator.getOfficialSunriseCalendarForDate(calendar))
-                .plus(Duration.ofMinutes(60));
+                .plus(Duration.ofMinutes(90));
 
             sunset = toLocalDateTime(sunriseSunsetCalculator.getOfficialSunsetCalendarForDate(calendar))
-                .minus(Duration.ofMinutes(30));
+                .minus(Duration.ofMinutes(90));
         } else if (now.isAfter(sunrise) || now.isEqual(sunrise)) {
             calendar.add(Calendar.DATE, 1);
 
             sunrise = toLocalDateTime(sunriseSunsetCalculator.getOfficialSunriseCalendarForDate(calendar))
-                .plus(Duration.ofMinutes(60));
+                .plus(Duration.ofMinutes(90));
         }
 
         return Tuple3.apply(sunrise, sunset, now);
