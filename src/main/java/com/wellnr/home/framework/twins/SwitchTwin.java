@@ -2,7 +2,7 @@ package com.wellnr.home.framework.twins;
 
 import java.util.Optional;
 
-public interface Switch {
+public interface SwitchTwin {
 
     void turnOn();
 

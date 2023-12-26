@@ -2,7 +2,7 @@ package com.wellnr.home.scenes;
 
 import com.wellnr.home.framework.scenes.environment.Daylight;
 import com.wellnr.home.framework.scenes.DeviceExpression;
-import com.wellnr.home.framework.scenes.Switch;
+import com.wellnr.home.framework.scenes.SingleSwitch;
 import com.wellnr.home.framework.scenes.SwitchGroup;
 import lombok.AllArgsConstructor;
 
@@ -22,26 +22,26 @@ public class Lightning {
     private final SwitchGroup sleepingRoomLights;
 
     public static Lightning apply() {
-        var basementStairs = Switch.apply("iot-plug-017");
-        var changingRoom = Switch.apply("iot-plug-018");
-        var diningLeft = Switch.apply("iot-plug-010");
-        var diningRight = Switch.apply("iot-plug-011");
-        var gallery = Switch.apply("iot-plug-008");
-        var galleryReading = Switch.apply("iot-plug-003");
-        var guestRoom01 = Switch.apply("iot-plug-005"); // Not checked
-        var guestRoom02 = Switch.apply("iot-plug-007");
-        var kitchenWindow = Switch.apply("iot-plug-013");
-        var livingRoomCoach = Switch.apply("iot-plug-012");
-        var livingRoomCorner = Switch.apply("iot-plug-001");
-        var livingRoomPiano = Switch.apply("iot-plug-016");
-        var livingRoomTVLeft = Switch.apply("iot-plug-006");
-        var livingRoomTVRight = Switch.apply("iot-plug-009");
-        var sleepingRoom = Switch.apply("iot-plug-015");
-        var stairs = Switch.apply("iot-plug-014");
-        var typewriter = Switch.apply("iot-plug-002");
-        var workplacesWindow = Switch.apply("iot-plug-004");
+        var basementStairs = SingleSwitch.apply("iot-plug-017");
+        var changingRoom = SingleSwitch.apply("iot-plug-018");
+        var diningLeft = SingleSwitch.apply("iot-plug-010");
+        var diningRight = SingleSwitch.apply("iot-plug-011");
+        var gallery = SingleSwitch.apply("iot-plug-008");
+        var galleryReading = SingleSwitch.apply("iot-plug-003");
+        var guestRoom01 = SingleSwitch.apply("iot-plug-005"); // Not checked
+        var guestRoom02 = SingleSwitch.apply("iot-plug-007");
+        var kitchenWindow = SingleSwitch.apply("iot-plug-013");
+        var livingRoomCoach = SingleSwitch.apply("iot-plug-012");
+        var livingRoomCorner = SingleSwitch.apply("iot-plug-001");
+        var livingRoomPiano = SingleSwitch.apply("iot-plug-016");
+        var livingRoomTVLeft = SingleSwitch.apply("iot-plug-006");
+        var livingRoomTVRight = SingleSwitch.apply("iot-plug-009");
+        var sleepingRoom = SingleSwitch.apply("iot-plug-015");
+        var stairs = SingleSwitch.apply("iot-plug-014");
+        var typewriter = SingleSwitch.apply("iot-plug-002");
+        var workplacesWindow = SingleSwitch.apply("iot-plug-004");
 
-        var outsideFrontDoor = Switch.apply("iot-switch-001");
+        var outsideFrontDoor = SingleSwitch.apply("iot-switch-001");
 
         var allNightLights = SwitchGroup.apply(
                 outsideFrontDoor,

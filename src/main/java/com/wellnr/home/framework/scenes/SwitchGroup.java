@@ -7,26 +7,28 @@ import java.util.List;
 
 @Value
 @AllArgsConstructor(staticName = "apply")
-public class SwitchGroup implements Device {
+public class SwitchGroup implements Switch<SwitchGroup> {
 
-    List<Switch> switches;
+    String name;
+
+    List<SingleSwitch> switches;
 
     boolean on;
 
-    public static SwitchGroup apply(List<Switch> switches) {
-        return new SwitchGroup(switches, false);
+    public static SwitchGroup apply(String name, List<SingleSwitch> switches) {
+        return new SwitchGroup(name, switches, false);
     }
 
-    public static SwitchGroup apply(Switch...switches) {
-        return apply(List.of(switches));
+    public static SwitchGroup apply(String name, SingleSwitch...switches) {
+        return apply(name, List.of(switches));
     }
 
     public SwitchGroup turnedOn() {
-        return apply(switches, true);
+        return apply(name, switches, true);
     }
 
     public SwitchGroup turnedOff() {
-        return apply(switches, false);
+        return apply(name, switches, false);
     }
 
 }

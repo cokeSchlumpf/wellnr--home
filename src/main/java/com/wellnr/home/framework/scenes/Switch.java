@@ -1,26 +1,11 @@
 package com.wellnr.home.framework.scenes;
 
-import lombok.AllArgsConstructor;
-import lombok.Value;
+public interface Switch<T extends Switch<T>> extends Device {
 
-@Value
-@AllArgsConstructor(staticName = "apply")
-public class Switch implements Device {
+    T turnedOn();
 
-    String deviceName;
+    T turnedOff();
 
-    boolean on;
-
-    public static Switch apply(String deviceName) {
-        return new Switch(deviceName, false);
-    }
-
-    public Switch turnedOn() {
-        return apply(deviceName, true);
-    }
-
-    public Switch turnedOff() {
-        return apply(deviceName, false);
-    }
+    boolean isOn();
 
 }

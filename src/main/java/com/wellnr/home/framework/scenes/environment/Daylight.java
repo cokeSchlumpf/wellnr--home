@@ -86,6 +86,7 @@ public class Daylight {
         );
     }
 
+
     public LocalDateTime getNextSunrise() {
         return cache.get("next-sunrise", k -> {
             var calendar = createCalendar();
@@ -107,11 +108,11 @@ public class Daylight {
     public LocalDateTime getLastSunrise() {
         return cache.get("last-sunrise", k -> {
             var calendar = createCalendar();
-            var sunrise = getSunset(calendar);
+            var sunrise = getSunrise(calendar);
 
             if (now.isBefore(sunrise)) {
                 calendar.add(Calendar.DATE, -1);
-                return getSunset(calendar);
+                return getSunrise(calendar);
             } else {
                 return sunrise;
             }
@@ -187,7 +188,7 @@ public class Daylight {
 
     private LocalDateTime getSunset(Calendar calendar) {
         return toLocalDateTime(
-                sunriseSunsetCalculator.getOfficialSunriseCalendarForDate(calendar)
+                sunriseSunsetCalculator.getOfficialSunsetCalendarForDate(calendar)
         ).minus(
                 Duration.ofMinutes(adjustSunsetMinutes)
         );

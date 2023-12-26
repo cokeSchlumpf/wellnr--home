@@ -12,7 +12,7 @@ public class DeviceRegistry {
     /**
      * An internal map of all devices mapped to their unique name.
      */
-    private final Map<String, Device<?, ?>> devices;
+    private final Map<String, DeviceTwin<?, ?>> devices;
 
     /**
      * Creates a new instance.
@@ -29,7 +29,7 @@ public class DeviceRegistry {
      * @param device The device to register.
      * @throws RuntimeException If the device with the given name has already been registered.
      */
-    public void registerDevice(Device<?, ?> device) {
+    public void registerDevice(DeviceTwin<?, ?> device) {
         if (devices.containsKey(device.getDeviceName())) {
             throw new RuntimeException("Device with name `" + device.getDeviceName() + "` has already been registered.");
         }
@@ -44,7 +44,7 @@ public class DeviceRegistry {
      * @return The device with the given name.
      * @throws RuntimeException If the device with the given name has not been registered.
      */
-    public Device<?, ?> getDeviceByName(String name) {
+    public DeviceTwin<?, ?> getDeviceByName(String name) {
         if (!devices.containsKey(name)) {
             throw new RuntimeException("Device with name `" + name + "` has not been registered.");
         }

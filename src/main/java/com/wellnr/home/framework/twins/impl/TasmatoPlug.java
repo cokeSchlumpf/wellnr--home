@@ -2,8 +2,8 @@ package com.wellnr.home.framework.twins.impl;
 
 import com.jayway.jsonpath.JsonPath;
 import com.wellnr.common.Operators;
-import com.wellnr.home.framework.twins.Device;
-import com.wellnr.home.framework.twins.Switch;
+import com.wellnr.home.framework.twins.DeviceTwin;
+import com.wellnr.home.framework.twins.SwitchTwin;
 import lombok.extern.slf4j.Slf4j;
 import org.eclipse.paho.client.mqttv3.IMqttClient;
 import org.eclipse.paho.client.mqttv3.MqttMessage;
@@ -13,7 +13,7 @@ import java.util.Objects;
 import java.util.Optional;
 
 @Slf4j
-public class TasmatoPlug extends Device<Boolean, TasmatoPlug> implements Switch {
+public class TasmatoPlug extends DeviceTwin<Boolean, TasmatoPlug> implements SwitchTwin {
 
     private final IMqttClient client;
 
