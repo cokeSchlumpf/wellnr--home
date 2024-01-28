@@ -174,7 +174,7 @@ public class AutomaticLightningService {
             calendar.add(Calendar.DATE, 1);
 
             sunrise = toLocalDateTime(sunriseSunsetCalculator.getOfficialSunriseCalendarForDate(calendar))
-                .plus(Duration.ofMinutes(30));
+                .plus(Duration.ofMinutes(timeOffsetMinutes));
         }
 
         return Tuple3.apply(sunrise, sunset, now);
