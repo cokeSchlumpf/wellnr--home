@@ -152,7 +152,7 @@ public class AutomaticLightningService {
      * @return A tuple with three values: Next Sunrise, next sunset and the current date and time.
      */
     private Tuple3<LocalDateTime, LocalDateTime, LocalDateTime> getNextSunriseAndNextSunset() {
-        var timeOffsetMinutes = 0;
+        var timeOffsetMinutes = 30;
         var calendar = Calendar.getInstance(timeZone);
         var sunrise = toLocalDateTime(sunriseSunsetCalculator.getOfficialSunriseCalendarForDate(calendar))
             .plus(Duration.ofMinutes(timeOffsetMinutes));
