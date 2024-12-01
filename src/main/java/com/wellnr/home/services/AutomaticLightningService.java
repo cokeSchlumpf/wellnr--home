@@ -15,6 +15,7 @@ import java.time.Duration;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.Calendar;
+import java.util.List;
 import java.util.Objects;
 import java.util.TimeZone;
 
@@ -22,7 +23,9 @@ import java.util.TimeZone;
 @Component
 public class AutomaticLightningService {
 
-    private final TasmatoPlug[] iotPlugs;
+    private final List<TasmatoPlug> nightLights;
+
+    private final List<TasmatoPlug> workLights;
 
     private final EWeLinkSwitch outsideSwitch;
 
@@ -35,26 +38,34 @@ public class AutomaticLightningService {
     Boolean workLightsTurnedOn;
 
     public AutomaticLightningService(IMqttClient client, EWeLinkSwitch outsideSwitch) {
-        this.iotPlugs = new TasmatoPlug[18];
+        var galleryLights = new TasmatoPlug(client, "wellnr/home", "iot-plug-001");
+        var livingRoomLights = new TasmatoPlug(client, "wellnr/home", "iot-plug-002");
+        var entranceLights = new TasmatoPlug(client, "wellnr/home", "iot-plug-003");
+        var guestsNorthLights = new TasmatoPlug(client, "wellnr/home", "iot-plug-004");
+        var workWindowLights = new TasmatoPlug(client, "wellnr/home", "iot-plug-005");
+        var workWallLights = new TasmatoPlug(client, "wellnr/home", "iot-plug-006");
+        var guestsSouthLights = new TasmatoPlug(client, "wellnr/home", "iot-plug-007");
+        var unknownLights01 = new TasmatoPlug(client, "wellnr/home", "iot-plug-008");
+        var pianoLights = new TasmatoPlug(client, "wellnr/home", "iot-plug-009");
+        var unknownLights02 = new TasmatoPlug(client, "wellnr/home", "iot-plug-010");
+        var diningRoomLights = new TasmatoPlug(client, "wellnr/home", "iot-plug-011");
+        var unknownLights03 = new TasmatoPlug(client, "wellnr/home", "iot-plug-012");
+        var guestsSouthEastLights = new TasmatoPlug(client, "wellnr/home", "iot-plug-013");
+        var pyramideLights = new TasmatoPlug(client, "wellnr/home", "iot-plug-014");
+        var unknownLights04 = new TasmatoPlug(client, "wellnr/home", "iot-plug-015");
+        var sleepingRoomLights = new TasmatoPlug(client, "wellnr/home", "iot-plug-016");
+        var entranceWindowSmallLights = new TasmatoPlug(client, "wellnr/home", "iot-plug-017");
+        var bathroomLights = new TasmatoPlug(client, "wellnr/home", "iot-plug-018");
+        var wardrobeLights = new TasmatoPlug(client, "wellnr/home", "iot-plug-019");
+        var kitchenLights = new TasmatoPlug(client, "wellnr/home", "iot-plug-020");
 
-        this.iotPlugs[0] = new TasmatoPlug(client, "wellnr/home", "iot-plug-001"); // Gallery
-        this.iotPlugs[1] = new TasmatoPlug(client, "wellnr/home", "iot-plug-002"); // Living-Room
-        this.iotPlugs[2] = new TasmatoPlug(client, "wellnr/home", "iot-plug-003"); // Entrance/ Typewriter
-        this.iotPlugs[3] = new TasmatoPlug(client, "wellnr/home", "iot-plug-004"); // Work window
-        this.iotPlugs[4] = new TasmatoPlug(client, "wellnr/home", "iot-plug-005"); // Work window
-        this.iotPlugs[5] = new TasmatoPlug(client, "wellnr/home", "iot-plug-006"); // Work wall
-        this.iotPlugs[6] = new TasmatoPlug(client, "wellnr/home", "iot-plug-007"); // Guests south
-        this.iotPlugs[7] = new TasmatoPlug(client, "wellnr/home", "iot-plug-008");
-        this.iotPlugs[8] = new TasmatoPlug(client, "wellnr/home", "iot-plug-009");
-        this.iotPlugs[9] = new TasmatoPlug(client, "wellnr/home", "iot-plug-010");
-        this.iotPlugs[10] = new TasmatoPlug(client, "wellnr/home", "iot-plug-011");
-        this.iotPlugs[11] = new TasmatoPlug(client, "wellnr/home", "iot-plug-012");
-        this.iotPlugs[12] = new TasmatoPlug(client, "wellnr/home", "iot-plug-013");
-        this.iotPlugs[13] = new TasmatoPlug(client, "wellnr/home", "iot-plug-014");
-        this.iotPlugs[14] = new TasmatoPlug(client, "wellnr/home", "iot-plug-015");
-        this.iotPlugs[15] = new TasmatoPlug(client, "wellnr/home", "iot-plug-016");
-        this.iotPlugs[16] = new TasmatoPlug(client, "wellnr/home", "iot-plug-017");
-        this.iotPlugs[17] = new TasmatoPlug(client, "wellnr/home", "iot-plug-018");
+        this.nightLights = List.of(
+            galleryLights, livingRoomLights
+        );
+
+        this.workLights = List.of(
+            entranceLights, guestsNorthLights, workWindowLights, workWallLights, guestsSouthLights, unknownLights01, pianoLights, unknownLights02, diningRoomLights, unknownLights03, guestsSouthEastLights, pyramideLights, unknownLights04, sleepingRoomLights, entranceWindowSmallLights, bathroomLights, wardrobeLights, kitchenLights
+        );
 
         this.outsideSwitch = outsideSwitch;
 
@@ -99,9 +110,11 @@ public class AutomaticLightningService {
     private void turnOnNightLights() {
         if (Objects.isNull(this.nightLightsTurnedOn) || !this.nightLightsTurnedOn) {
             log.info("Send request to turn on the lights ...");
-            for (var i = 0; i < 2; i++) {
-                this.iotPlugs[i].turnOn();
-            }
+
+            this.nightLights.forEach(plug -> {
+                plug.turnOn();
+                Operators.suppressExceptions(() -> Thread.sleep(300));
+            });
 
             this.outsideSwitch.turnOn();
             this.nightLightsTurnedOn = true;
@@ -111,10 +124,11 @@ public class AutomaticLightningService {
     private void turnOnWorkLights() {
         if (Objects.isNull(this.workLightsTurnedOn) || !this.workLightsTurnedOn) {
             log.info("Send request to turn on work lights");
-            for (var i = 2; i < this.iotPlugs.length; i++) {
-                this.iotPlugs[i].turnOn();
+
+            this.workLights.forEach(plug -> {
+                plug.turnOn();
                 Operators.suppressExceptions(() -> Thread.sleep(300));
-            }
+            });
 
             this.workLightsTurnedOn = true;
         }
@@ -124,9 +138,10 @@ public class AutomaticLightningService {
         if (Objects.isNull(this.nightLightsTurnedOn) || this.nightLightsTurnedOn) {
             log.info("Send request to turn off the lights ...");
 
-            for (var i = 0; i < 2; i++) {
-                this.iotPlugs[i].turnOff();
-            }
+            this.nightLights.forEach(plug -> {
+                plug.turnOff();
+                Operators.suppressExceptions(() -> Thread.sleep(300));
+            });
 
             this.outsideSwitch.turnOff();
             this.nightLightsTurnedOn = false;
@@ -137,10 +152,10 @@ public class AutomaticLightningService {
         if (Objects.isNull(this.workLightsTurnedOn) || this.workLightsTurnedOn) {
             log.info("Send request to turn off work lights ...");
 
-            for (var i = 2; i < this.iotPlugs.length; i++) {
-                this.iotPlugs[i].turnOff();
+            this.workLights.forEach(plug -> {
+                plug.turnOff();
                 Operators.suppressExceptions(() -> Thread.sleep(300));
-            }
+            });
 
             this.workLightsTurnedOn = false;
         }
