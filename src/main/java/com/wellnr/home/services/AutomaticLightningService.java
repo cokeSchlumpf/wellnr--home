@@ -6,6 +6,7 @@ import com.wellnr.common.Operators;
 import com.wellnr.common.markup.Tuple3;
 import com.wellnr.home.framework.EWeLinkSwitch;
 import com.wellnr.home.framework.TasmatoPlug;
+import com.wellnr.home.ports.weather.WeatherPort;
 import lombok.extern.slf4j.Slf4j;
 import org.eclipse.paho.client.mqttv3.IMqttClient;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -23,11 +24,17 @@ import java.util.TimeZone;
 @Component
 public class AutomaticLightningService {
 
+    private static final double LATITUDE = 49.442009;
+
+    private static final double LONGITUDE = 6.636030;
+
     private final List<TasmatoPlug> nightLights;
 
     private final List<TasmatoPlug> workLights;
 
     private final EWeLinkSwitch outsideSwitch;
+
+    private final WeatherPort weatherPort;
 
     private final TimeZone timeZone;
 
@@ -37,7 +44,9 @@ public class AutomaticLightningService {
 
     Boolean workLightsTurnedOn;
 
-    public AutomaticLightningService(IMqttClient client, EWeLinkSwitch outsideSwitch) {
+    public AutomaticLightningService(IMqttClient client, EWeLinkSwitch outsideSwitch, WeatherPort weatherPort) {
+        this.weatherPort = weatherPort;
+
         var galleryLights = new TasmatoPlug(client, "wellnr/home", "iot-plug-001");
         var livingRoomLights = new TasmatoPlug(client, "wellnr/home", "iot-plug-002");
         var entranceLights = new TasmatoPlug(client, "wellnr/home", "iot-plug-003");
@@ -69,7 +78,7 @@ public class AutomaticLightningService {
 
         this.outsideSwitch = outsideSwitch;
 
-        var location = new Location("49.442009", "6.636030");
+        var location = new Location(String.valueOf(LATITUDE), String.valueOf(LONGITUDE));
         this.timeZone = TimeZone.getTimeZone("Europe/Berlin");
         this.sunriseSunsetCalculator = new SunriseSunsetCalculator(location, timeZone);
         this.nightLightsTurnedOn = null;
@@ -168,6 +177,15 @@ public class AutomaticLightningService {
      */
     private Tuple3<LocalDateTime, LocalDateTime, LocalDateTime> getNextSunriseAndNextSunset() {
         var timeOffsetMinutes = 30;
+
+        var weather = this.weatherPort.getCurrentWeather(LATITUDE, LONGITUDE);
+        var cloudCoverThreshold = 25;
+        var maxOffsetMinutesExtension = 120;
+        var cloudCover = Math.round(
+            (float) Math.max(0, weather.getCloudCover() - 100 + cloudCoverThreshold) / cloudCoverThreshold * maxOffsetMinutesExtension
+        );
+        timeOffsetMinutes += cloudCover;
+
         var calendar = Calendar.getInstance(timeZone);
         var sunrise = toLocalDateTime(sunriseSunsetCalculator.getOfficialSunriseCalendarForDate(calendar))
             .plus(Duration.ofMinutes(timeOffsetMinutes));

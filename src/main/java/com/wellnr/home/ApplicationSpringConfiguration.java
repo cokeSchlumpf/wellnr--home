@@ -1,8 +1,12 @@
 package com.wellnr.home;
 
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.wellnr.common.Operators;
 import com.wellnr.home.framework.EWeLinkSwitch;
+import com.wellnr.home.ports.weather.BrightSightWeatherAPIPort;
+import com.wellnr.home.ports.weather.CachedWeatherAPIPort;
+import com.wellnr.home.ports.weather.WeatherPort;
 import lombok.extern.slf4j.Slf4j;
 import okhttp3.OkHttpClient;
 import org.eclipse.paho.client.mqttv3.IMqttClient;
@@ -58,6 +62,12 @@ public class ApplicationSpringConfiguration {
         return new EWeLinkSwitch(
             "ewelink-switch-outside", eWeLinkOutsideEnableUrl, eWeLinkOutsideDisableUrl, client
         );
+    }
+
+    @Bean
+    public WeatherPort getWeatherPort(ObjectMapper om, OkHttpClient client) {
+        var impl = new BrightSightWeatherAPIPort(client, om);
+        return new CachedWeatherAPIPort(impl);
     }
 
 }
