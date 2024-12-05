@@ -8,17 +8,17 @@ import org.junit.jupiter.api.Test;
 
 public class WeatherAPITest {
 
-    @Test
+    // @Test
     public void testWeatherAPI() {
         var om = new ObjectMapper();
         var client = new OkHttpClient();
 
         var weatherPort = new CachedWeatherAPIPort(new BrightSightWeatherAPIPort(client, om));
 
-        var weather = weatherPort.getCurrentWeather(49.442009,6.636030);
+        var weather = weatherPort.getCurrentWeather(49.442009, 6.636030);
         System.out.println("Current weather: " + weather);
 
-        weather = weatherPort.getCurrentWeather(49.442009,6.636030);
+        weather = weatherPort.getCurrentWeather(49.442009, 6.636030);
         System.out.println("Current weather: " + weather);
     }
 
