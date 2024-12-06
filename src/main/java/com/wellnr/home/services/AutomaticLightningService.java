@@ -180,7 +180,7 @@ public class AutomaticLightningService {
 
         var weather = this.weatherPort.getCurrentWeather(LATITUDE, LONGITUDE);
         var cloudCoverThreshold = 25;
-        var maxOffsetMinutesExtension = 120;
+        var maxOffsetMinutesExtension = 90;
         var cloudCover = Math.round(
             (float) Math.max(0, weather.getCloudCover() - 100 + cloudCoverThreshold) / cloudCoverThreshold * maxOffsetMinutesExtension
         );
