@@ -109,8 +109,10 @@ public class AutomaticLightningService {
             }
         } else if (!sunriseIsToday && sunsetIsToday) { // during daylight
             /* Usually */
+            /*
             Operators.ignoreExceptions(this::turnOffNightLights, log);
             Operators.ignoreExceptions(this::turnOffWorkLights, log);
+            */
             /* Christmas Days */
             Operators.ignoreExceptions(this::turnOnNightLights, log);
             Operators.ignoreExceptions(this::turnOnWorkLights, log);
