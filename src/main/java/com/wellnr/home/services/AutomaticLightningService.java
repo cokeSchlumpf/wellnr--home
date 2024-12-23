@@ -116,7 +116,6 @@ public class AutomaticLightningService {
             Operators.ignoreExceptions(this::turnOnNightLights, log);
             Operators.ignoreExceptions(this::turnOnWorkLights, log);
             */
-             */
         } else { // after sunset
             Operators.ignoreExceptions(this::turnOnNightLights, log);
             Operators.ignoreExceptions(this::turnOnWorkLights, log);
