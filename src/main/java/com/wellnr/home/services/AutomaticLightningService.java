@@ -109,13 +109,14 @@ public class AutomaticLightningService {
             }
         } else if (!sunriseIsToday && sunsetIsToday) { // during daylight
             /* Usually */
-            /*
             Operators.ignoreExceptions(this::turnOffNightLights, log);
             Operators.ignoreExceptions(this::turnOffWorkLights, log);
-            */
             /* Christmas Days */
+            /*
             Operators.ignoreExceptions(this::turnOnNightLights, log);
             Operators.ignoreExceptions(this::turnOnWorkLights, log);
+            */
+             */
         } else { // after sunset
             Operators.ignoreExceptions(this::turnOnNightLights, log);
             Operators.ignoreExceptions(this::turnOnWorkLights, log);
@@ -186,7 +187,7 @@ public class AutomaticLightningService {
 
         var weather = this.weatherPort.getCurrentWeather(LATITUDE, LONGITUDE);
         var cloudCoverThreshold = 25;
-        var maxOffsetMinutesExtension = 90;
+        var maxOffsetMinutesExtension = 120;
         var cloudCover = Math.round(
             (float) Math.max(0, weather.getCloudCover() - 100 + cloudCoverThreshold) / cloudCoverThreshold * maxOffsetMinutesExtension
         );
