@@ -89,8 +89,8 @@ public class AutomaticLightningService {
     public void switchLights() {
         var nextSunriseAndNextSunset = this.getNextSunriseAndNextSunset();
 
-        var shutdownWorkLightsTime = LocalTime.parse("01:30:00");
-        var turnOnWorkLightsMorning = LocalTime.parse("08:00:00");
+        var shutdownWorkLightsTime = LocalTime.parse("00:30:00");
+        var turnOnWorkLightsMorning = LocalTime.parse("05:30:00");
 
         var now = LocalTime.now(this.timeZone.toZoneId());
         var today = nextSunriseAndNextSunset.get_3().toLocalDate();
@@ -186,7 +186,7 @@ public class AutomaticLightningService {
 
         var weather = this.weatherPort.getCurrentWeather(LATITUDE, LONGITUDE);
         var cloudCoverThreshold = 25;
-        var maxOffsetMinutesExtension = 120;
+        var maxOffsetMinutesExtension = 90;
         var cloudCover = Math.round(
             (float) Math.max(0, weather.getCloudCover() - 100 + cloudCoverThreshold) / cloudCoverThreshold * maxOffsetMinutesExtension
         );
